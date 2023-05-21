@@ -1,14 +1,29 @@
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, mapped_column
 
-from .Engine import Base
+from db import field_constraints
 from sqlalchemy import Column, Integer, String, CHAR, TEXT, Enum, DATETIME, ForeignKey
+from db.models.base import BaseModel
 
 TaskStatus = Enum('open', 'active', 'resolved', name='task_status')
 EmployeeChangeType = Enum('add', 'remove', name='employee_change_type')
 OriginReportPartType = Enum('report', 'task', name='origin_report_part_type')
 
 
-class Employee(Base):
+class User(BaseModel):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    name = Column(
+        String(field_constraints.DEFAULT_STRING_LENGTH),
+        nullable=False,
+        comment="User name",
+    )
+    boss_id = mapped_column(ForeignKey("users.id"))
+
+    boss = relationship("User", remote_side=[id])
+
+
+class Employee(BaseModel):
     __tablename__ = 'Employee'
     id = Column(Integer, primary_key=True)
 
@@ -16,7 +31,7 @@ class Employee(Base):
     boss = Column(Integer)
 
 
-class Task(Base):
+class Task(BaseModel):
     __tablename__ = 'Task'
     id = Column(Integer, primary_key=True)
 
@@ -26,7 +41,7 @@ class Task(Base):
     creation = Column(DATETIME, nullable=False)
 
 
-class EmployeeTask(Base):
+class EmployeeTask(BaseModel):
     __tablename__ = 'EmployeeTask'
     id = Column(Integer, primary_key=True)
 
@@ -37,7 +52,7 @@ class EmployeeTask(Base):
     task_rel = relationship('Task', backref='employee_task_rel')
 
 
-class Event(Base):
+class Event(BaseModel):
     __tablename__ = 'Event'
     id = Column(Integer, primary_key=True)
 
@@ -49,7 +64,7 @@ class Event(Base):
     task_rel = relationship('Task', backref='event_rel')
 
 
-class Comment(Base):
+class Comment(BaseModel):
     __tablename__ = 'Comment'
     id = Column(Integer, primary_key=True)
 
@@ -59,7 +74,7 @@ class Comment(Base):
     event_rel = relationship('Event', backref='comment_rel')
 
 
-class EmployeeChange(Base):
+class EmployeeChange(BaseModel):
     __tablename__ = 'EmployeeChange'
     id = Column(Integer, primary_key=True)
 
@@ -71,7 +86,7 @@ class EmployeeChange(Base):
     employee_rel = relationship('Employee', backref='employee_change_rel')
 
 
-class StatusChange(Base):
+class StatusChange(BaseModel):
     __tablename__ = 'StatusChange'
     id = Column(Integer, primary_key=True)
 
@@ -82,7 +97,7 @@ class StatusChange(Base):
     event_rel = relationship('Event', backref='status_change_rel')
 
 
-class Report(Base):
+class Report(BaseModel):
     __tablename__ = 'Report'
     id = Column(Integer, primary_key=True)
 
@@ -93,7 +108,7 @@ class Report(Base):
     employee_rel = relationship('Employee', backref='report_rel')
 
 
-class ReportPart(Base):
+class ReportPart(BaseModel):
     __tablename__ = 'ReportPart'
     id = Column(Integer, primary_key=True)
 
