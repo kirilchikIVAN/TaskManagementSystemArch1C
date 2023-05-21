@@ -66,22 +66,22 @@ class BaseDAL(typing.Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         for field in vars(db_obj).keys():
             if field in obj_in_data:
                 if isinstance(
-                    getattr(self.model, field).type, sa.String
+                        getattr(self.model, field).type, sa.String
                 ) and isinstance(obj_in_data[field], int):
                     setattr(db_obj, field, str(obj_in_data[field]))
                 elif isinstance(
-                    getattr(self.model, field).type, sa.String
+                        getattr(self.model, field).type, sa.String
                 ) and isinstance(obj_in_data[field], float):
                     setattr(db_obj, field, str(obj_in_data[field]))
                 elif isinstance(
-                    getattr(self.model, field).type, sa.DateTime
+                        getattr(self.model, field).type, sa.DateTime
                 ) and isinstance(obj_in_data[field], datetime.datetime):
                     # There is no reason to store TZ info in PG, thus to avoid conflicts in asyncpg, remove it
                     setattr(db_obj, field, obj_in_data[field].replace(tzinfo=None))
         return await self.upsert(db_obj)
 
     async def update_from_api(
-        self, db_obj: ModelType, obj_in: UpdateSchemaType | dict[str, typing.Any]
+            self, db_obj: ModelType, obj_in: UpdateSchemaType | dict[str, typing.Any]
     ) -> ModelType:
         if isinstance(obj_in, dict):
             update_data = obj_in
@@ -90,15 +90,15 @@ class BaseDAL(typing.Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         for field in vars(db_obj).keys():
             if field in update_data:
                 if isinstance(
-                    getattr(self.model, field).type, sa.String
+                        getattr(self.model, field).type, sa.String
                 ) and isinstance(update_data[field], int):
                     setattr(db_obj, field, str(update_data[field]))
                 elif isinstance(
-                    getattr(self.model, field).type, sa.String
+                        getattr(self.model, field).type, sa.String
                 ) and isinstance(update_data[field], float):
                     setattr(db_obj, field, str(update_data[field]))
                 elif isinstance(
-                    getattr(self.model, field).type, sa.DateTime
+                        getattr(self.model, field).type, sa.DateTime
                 ) and isinstance(update_data[field], datetime.datetime):
                     # There is no reason to store TZ info in PG, thus to avoid conflicts in asyncpg, remove it
                     setattr(db_obj, field, update_data[field].replace(tzinfo=None))
@@ -107,7 +107,7 @@ class BaseDAL(typing.Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return await self.upsert(db_obj=db_obj)
 
     async def update_by_id_from_api(
-        self, db_id: int, obj_in: UpdateSchemaType | dict[str, typing.Any]
+            self, db_id: int, obj_in: UpdateSchemaType | dict[str, typing.Any]
     ) -> ModelType:
         db_obj = await self.get_by_id_with_exception(db_id=db_id)
         return await self.update_from_api(db_obj=db_obj, obj_in=obj_in)
@@ -115,3 +115,13 @@ class BaseDAL(typing.Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     async def remove_by_id_from_api(self, db_id: int):
         db_obj = await self.get_by_id_with_exception(db_id=db_id)
         await self.remove(db_obj=db_obj)
+
+    async def update_by_id_with_exception(
+            self, db_id: int, obj_in: UpdateSchemaType | dict[str, typing.Any]
+    ) -> ModelType:
+        db_obj = await self.get_by_id_with_exception(db_id=db_id)
+        if db_obj is None:
+            raise ObjectNotFoundError(
+                object_name=self.readable_object_name, field="id", value=str(db_id)
+            )
+        return await self.update_from_api(db_obj=db_obj, obj_in=obj_in)

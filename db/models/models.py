@@ -1,6 +1,5 @@
 from sqlalchemy.orm import relationship, mapped_column
 
-from db import field_constraints
 from sqlalchemy import Column, Integer, String, CHAR, TEXT, Enum, DATETIME, ForeignKey
 from db.models.base import BaseModel
 
@@ -9,26 +8,14 @@ EmployeeChangeType = Enum('add', 'remove', name='employee_change_type')
 OriginReportPartType = Enum('report', 'task', name='origin_report_part_type')
 
 
-class User(BaseModel):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
-    name = Column(
-        String(field_constraints.DEFAULT_STRING_LENGTH),
-        nullable=False,
-        comment="User name",
-    )
-    boss_id = mapped_column(ForeignKey("users.id"))
-
-    boss = relationship("User", remote_side=[id])
-
-
 class Employee(BaseModel):
     __tablename__ = 'Employee'
     id = Column(Integer, primary_key=True)
 
     name = Column(String)
-    boss = Column(Integer)
+    boss_id = Column(Integer, ForeignKey('Employee.id'))
+
+    boss = relationship('Employee', remote_side=[id], backref='subordinates')
 
 
 class Task(BaseModel):
