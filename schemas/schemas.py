@@ -5,7 +5,7 @@ from pydantic import BaseModel
 
 class EmployeeCreateScheme(BaseModel):
     name: str
-    boss: int
+    boss_id: int | None = None
 
     class Config:
         orm_mode = True
@@ -13,7 +13,7 @@ class EmployeeCreateScheme(BaseModel):
 
 class EmployeeUpdateScheme(BaseModel):
     name: str = None
-    boss: int = None
+    boss_id: int = None
 
     class Config:
         orm_mode = True
