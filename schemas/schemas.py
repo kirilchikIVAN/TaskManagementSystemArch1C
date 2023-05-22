@@ -72,7 +72,7 @@ class EmployeeTaskScheme(EmployeeTaskCreateScheme):
 class EventCreateScheme(BaseModel):
     employee: int
     task: int
-    creation: str
+    creation: datetime
 
     class Config:
         orm_mode = True
@@ -157,8 +157,8 @@ class StatusChangeScheme(StatusChangeCreateScheme):
 
 class ReportCreateScheme(BaseModel):
     employee: int
-    start: str
-    end: str
+    start: datetime
+    end: datetime
 
     class Config:
         orm_mode = True
@@ -178,9 +178,8 @@ class ReportScheme(ReportCreateScheme):
 
 
 class ReportPartCreateScheme(BaseModel):
-    report: int
-    origin_report: int
-    origin_task: int
+    origin_report: int | None = None
+    origin_task: int | None = None
     origin_type: str
     comment: str
 
