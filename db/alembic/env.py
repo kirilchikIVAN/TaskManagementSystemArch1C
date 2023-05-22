@@ -34,7 +34,7 @@ target_metadata = BaseModel.metadata
 
 
 def get_url():
-    return settings_db.uri
+    return "sqlite+aiosqlite:///database.db"
 
 
 def run_migrations_offline() -> None:
