@@ -59,6 +59,7 @@ class Comment(BaseModel):
 
     event = Column(Integer, ForeignKey("Event.id"), nullable=False)
     content = Column(TEXT)
+    creation = Column(DateTime, nullable=False, default=datetime.utcnow)
 
     event_rel = relationship("Event", backref="comment_rel")
 

@@ -12,8 +12,8 @@ class EmployeeCreateScheme(BaseModel):
 
 
 class EmployeeUpdateScheme(BaseModel):
-    name: str = None
-    boss_id: int = None
+    name: str | None = None
+    boss_id: int | None = None
 
     class Config:
         orm_mode = True
@@ -33,9 +33,9 @@ class TaskCreateScheme(BaseModel):
 
 
 class TaskUpdateScheme(BaseModel):
-    title: str = None
-    description: str = None
-    status: str = None
+    title: str | None = None
+    description: str | None = None
+    status: str | None = None
 
     class Config:
         orm_mode = True
@@ -44,6 +44,9 @@ class TaskUpdateScheme(BaseModel):
 class TaskScheme(TaskCreateScheme):
     id: int
     creation: datetime
+    
+    class Config:
+        orm_mode = True
 
 
 class EmployeeTaskCreateScheme(BaseModel):
@@ -55,8 +58,8 @@ class EmployeeTaskCreateScheme(BaseModel):
 
 
 class EmployeeTaskUpdateScheme(BaseModel):
-    employee: int = None
-    task: int = None
+    employee: int | None = None
+    task: int | None = None
 
     class Config:
         orm_mode = True
@@ -76,9 +79,9 @@ class EventCreateScheme(BaseModel):
 
 
 class EventUpdateScheme(BaseModel):
-    employee: int = None
-    task: int = None
-    creation: str = None
+    employee: int | None = None
+    task: int | None = None
+    creation: str | None = None
 
     class Config:
         orm_mode = True
@@ -97,8 +100,8 @@ class CommentCreateScheme(BaseModel):
 
 
 class CommentUpdateScheme(BaseModel):
-    event: int = None
-    content: str = None
+    event: int | None = None
+    content: str | None = None
 
     class Config:
         orm_mode = True
@@ -118,9 +121,9 @@ class EmployeeChangeCreateScheme(BaseModel):
 
 
 class EmployeeChangeUpdateScheme(BaseModel):
-    event: int = None
-    employee: int = None
-    action: str = None
+    event: int | None = None
+    employee: int | None = None
+    action: str | None = None
 
     class Config:
         orm_mode = True
@@ -140,9 +143,9 @@ class StatusChangeCreateScheme(BaseModel):
 
 
 class StatusChangeUpdateScheme(BaseModel):
-    event: int = None
-    old: str = None
-    new: str = None
+    event: int | None = None
+    old: str | None = None
+    new: str | None = None
 
     class Config:
         orm_mode = True
@@ -162,9 +165,9 @@ class ReportCreateScheme(BaseModel):
 
 
 class ReportUpdateScheme(BaseModel):
-    employee: int = None
-    start: str = None
-    end: str = None
+    employee: int | None = None
+    start: datetime | None = None
+    end: datetime | None = None
 
     class Config:
         orm_mode = True
@@ -186,11 +189,11 @@ class ReportPartCreateScheme(BaseModel):
 
 
 class ReportPartUpdateScheme(BaseModel):
-    report: int = None
-    origin_report: int = None
-    origin_task: int = None
-    origin_type: str = None
-    comment: str = None
+    report: int | None = None
+    origin_report: int | None = None
+    origin_task: int | None = None
+    origin_type: str | None = None
+    comment: str | None = None
 
     class Config:
         orm_mode = True

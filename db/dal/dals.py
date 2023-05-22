@@ -2,7 +2,7 @@ import typing
 from datetime import datetime
 
 from pydantic import typing
-from sqlalchemy import and_, select
+from sqlalchemy import select
 
 from db.dal.base import BaseDAL
 from db.models.models import *
@@ -17,30 +17,6 @@ class EmployeeDAL(BaseDAL[Employee, EmployeeCreateScheme, EmployeeUpdateScheme])
 class TaskDAL(BaseDAL[Task, TaskCreateScheme, TaskUpdateScheme]):
     model = Task
     readable_object_name = "TaskDAL"
-
-    async def filter_by_time(
-        self, start_time: datetime, end_time: datetime
-    ) -> typing.Sequence[Task]:
-        query = self.get_query().where(
-            and_(Task.creation >= start_time, Task.creation <= end_time)
-        )
-        return await self.get_all(query=query)
-
-    async def filter_by_employee(self, employee_id: int) -> typing.Sequence[Task]:
-        query = (
-            self.get_query()
-            .join(EmployeeTask)
-            .filter(EmployeeTask.employee == employee_id)
-        )
-        return await self.get_all(query=query)
-
-    async def filter_by_boss(self, boss_id: int) -> typing.Sequence[Task]:
-        query = self.get_query().join(Employee).filter(Employee.boss_id == boss_id)
-        return await self.get_all(query=query)
-
-    async def filter_by_status(self, status: TaskStatus) -> typing.Sequence[Task]:
-        query = self.get_query().filter(Task.status == status)
-        return await self.get_all(query=query)
 
     async def filter_tasks(
         self,

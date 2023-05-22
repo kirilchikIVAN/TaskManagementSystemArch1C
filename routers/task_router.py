@@ -58,45 +58,11 @@ async def delete_task(
     await task_dal.remove_by_id_from_api(id)
 
 
-@router.get("/filter_by_time")
-async def filter_tasks_by_time(
-    start_time: datetime,
-    end_time: datetime,
-    task_dal: TaskDAL = Depends(get_db_dal_by_type(TaskDAL)),
-) -> list[TaskScheme]:
-    tasks = await task_dal.filter_by_time(start_time, end_time)
-    return [TaskScheme.from_orm(task) for task in tasks]
-
-
-@router.get("/filter_by_employee")
-async def filter_tasks_by_employee(
-    employee_id: int, task_dal: TaskDAL = Depends(get_db_dal_by_type(TaskDAL))
-) -> list[TaskScheme]:
-    tasks = await task_dal.filter_by_employee(employee_id)
-    return [TaskScheme.from_orm(task) for task in tasks]
-
-
-@router.get("/filter_by_boss")
-async def filter_tasks_by_boss(
-    boss_id: int, task_dal: TaskDAL = Depends(get_db_dal_by_type(TaskDAL))
-) -> list[TaskScheme]:
-    tasks = await task_dal.filter_by_boss(boss_id)
-    return [TaskScheme.from_orm(task) for task in tasks]
-
-
-@router.get("/filter_by_status")
-async def filter_tasks_by_status(
-    status: str, task_dal: TaskDAL = Depends(get_db_dal_by_type(TaskDAL))
-) -> list[TaskScheme]:
-    tasks = await task_dal.filter_by_status(status)
-    return [TaskScheme.from_orm(task) for task in tasks]
-
-
-@router.get("/filter")
+@router.get("/filter/")
 async def filter_tasks(
-    start_time: datetime = None,
-    end_time: datetime = None,
-    employee_id: int = None,
+    start_time: datetime | None = None,
+    end_time: datetime | None = None,
+    employee_id: int | None = None,
     status: str | None = None,
     task_dal: TaskDAL = Depends(get_db_dal_by_type(TaskDAL)),
 ) -> list[TaskScheme]:
