@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 
@@ -25,7 +27,6 @@ class TaskCreateScheme(BaseModel):
     title: str
     description: str
     status: str
-    creation: str
 
     class Config:
         orm_mode = True
@@ -35,7 +36,6 @@ class TaskUpdateScheme(BaseModel):
     title: str = None
     description: str = None
     status: str = None
-    creation: str = None
 
     class Config:
         orm_mode = True
@@ -43,6 +43,7 @@ class TaskUpdateScheme(BaseModel):
 
 class TaskScheme(TaskCreateScheme):
     id: int
+    creation: datetime
 
 
 class EmployeeTaskCreateScheme(BaseModel):
