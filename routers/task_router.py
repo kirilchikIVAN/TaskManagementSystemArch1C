@@ -94,7 +94,6 @@ async def get_all_related_objects_for_task(
     related_object_schemes = (
         comment_schemes + employee_change_schemes + status_change_schemes
     )
-    related_object_schemes.sort(key=lambda obj: obj.creation)
 
     return related_object_schemes
 
