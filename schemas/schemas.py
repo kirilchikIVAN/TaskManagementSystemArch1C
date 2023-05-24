@@ -178,6 +178,7 @@ class ReportScheme(ReportCreateScheme):
 
 
 class ReportPartCreateScheme(BaseModel):
+    report: int
     origin_report: int | None = None
     origin_task: int | None = None
     origin_type: str
