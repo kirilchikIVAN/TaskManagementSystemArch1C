@@ -1,0 +1,56 @@
+[tool.poetry]
+name = "task_management_system_arch_1c"
+version = "0.1.0"
+description = "TaskManagementSystem project at Arch 1C course"
+authors = ["Maxim Ivanov <ivanov.mi@phystech.edu>"]  # TODO: add kirilchikIVAN
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.95.1"
+uvicorn = "^0.22.0"
+pydantic = {extras = ["dotenv"], version = "^1.10.7"}
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.13"}
+alembic = "^1.10.4"
+asyncpg = "^0.27.0"
+aiosqlite = "^0.19.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+mypy = "^1.3.0"
+ruff = "^0.0.267"
+
+
+[tool.poetry.group.m1extra.dependencies]
+greenlet = "^2.0.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.mypy]
+show_error_codes = true
+ignore_missing_imports = true
+plugins = [
+    "sqlalchemy.ext.mypy.plugin",
+    "pydantic.mypy",
+]
+disable_error_code = [
+    "misc",
+    "call-overload",
+    "attr-defined"
+]
+exclude = [
+    "app.alembic",
+    "app.tests",
+]
+
+[tool.ruff]
+line-length = 120
+exclude = [
+    "alembic"
+]
+
+[per-file-ignores]
+"__init__.py" = ["F401"]
+"*test*" = ["S101"]      # assert in tests allowed
